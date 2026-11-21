@@ -22,6 +22,31 @@ class CategoryResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+# --- User Schemas ---
+
+# What the client sends when registering a new user
+class UserCreate(BaseModel):
+    email: str
+    # Password must be at least 6 characters
+    password: str = Field(min_length=6)
+
+
+# What the API sends back for a user (no password!)
+class UserResponse(BaseModel):
+    id: int
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- Token Schema ---
+
+# The JWT token returned after login
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 # --- Product Schemas ---
 
 # What the client sends when creating a new product
@@ -58,6 +83,31 @@ class ProductResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+# --- User Schemas ---
+
+# What the client sends when registering a new user
+class UserCreate(BaseModel):
+    email: str
+    # Password must be at least 6 characters
+    password: str = Field(min_length=6)
+
+
+# What the API sends back for a user (no password!)
+class UserResponse(BaseModel):
+    id: int
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- Token Schema ---
+
+# The JWT token returned after login
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 # --- CartItem Schemas ---
 
 # What the client sends when adding an item to the cart
@@ -76,6 +126,31 @@ class CartItemResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+# --- User Schemas ---
+
+# What the client sends when registering a new user
+class UserCreate(BaseModel):
+    email: str
+    # Password must be at least 6 characters
+    password: str = Field(min_length=6)
+
+
+# What the API sends back for a user (no password!)
+class UserResponse(BaseModel):
+    id: int
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- Token Schema ---
+
+# The JWT token returned after login
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 # --- Order Schemas ---
 
 # What the API sends back for a single item inside an order
@@ -89,6 +164,31 @@ class OrderItemResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+# --- User Schemas ---
+
+# What the client sends when registering a new user
+class UserCreate(BaseModel):
+    email: str
+    # Password must be at least 6 characters
+    password: str = Field(min_length=6)
+
+
+# What the API sends back for a user (no password!)
+class UserResponse(BaseModel):
+    id: int
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- Token Schema ---
+
+# The JWT token returned after login
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
 # What the API sends back for a full order, including its items
 class OrderResponse(BaseModel):
     id: int
@@ -99,3 +199,28 @@ class OrderResponse(BaseModel):
     items: list[OrderItemResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
+
+
+# --- User Schemas ---
+
+# What the client sends when registering a new user
+class UserCreate(BaseModel):
+    email: str
+    # Password must be at least 6 characters
+    password: str = Field(min_length=6)
+
+
+# What the API sends back for a user (no password!)
+class UserResponse(BaseModel):
+    id: int
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- Token Schema ---
+
+# The JWT token returned after login
+class Token(BaseModel):
+    access_token: str
+    token_type: str

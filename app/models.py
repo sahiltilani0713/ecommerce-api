@@ -89,3 +89,15 @@ class OrderItem(Base):
 
     # Lets us go back to the parent Order from an OrderItem
     order = relationship("Order", back_populates="items")
+
+
+# User table — stores registered user accounts
+class User(Base):
+    __tablename__ = "users"
+
+    # Unique ID for each user
+    id = Column(Integer, primary_key=True, index=True)
+    # User's email, must be unique and not empty
+    email = Column(String, unique=True, nullable=False, index=True)
+    # Hashed version of the user's password (never store plain text)
+    hashed_password = Column(String, nullable=False)

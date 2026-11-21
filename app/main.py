@@ -7,8 +7,8 @@ from app.database import engine, Base
 # Import models so SQLAlchemy knows about all tables before creating them
 from app import models
 
-# Import the routers for categories, products, cart, and orders
-from app.routers import categories, products, cart, orders
+# Import the routers for auth, categories, products, cart, and orders
+from app.routers import auth, categories, products, cart, orders
 
 # Create the FastAPI application with a title
 app = FastAPI(title="E-commerce API")
@@ -17,6 +17,7 @@ app = FastAPI(title="E-commerce API")
 Base.metadata.create_all(bind=engine)
 
 # Register all routers with the app
+app.include_router(auth.router)
 app.include_router(categories.router)
 app.include_router(products.router)
 app.include_router(cart.router)

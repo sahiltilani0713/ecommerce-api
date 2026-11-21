@@ -6,16 +6,17 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Category, Product
+from app.models import Category, Product, User
 from app.schemas import ProductCreate, ProductUpdate, ProductResponse
+from app.auth import get_current_user
 
 # Create a router for product endpoints
 router = APIRouter(prefix="/products", tags=["Products"])
 
 
-# Create a new product
+# Create a new product (login required)
 @router.post("/", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
-def create_product(product: ProductCreate, db: Session = Depends(get_db)):
+def create_product(product: ProductCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Make sure the category exists before creating the product
     category = db.query(Category).filter(Category.id == product.category_id).first()
     if not category:
@@ -58,9 +59,9 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
     return product
 
 
-# Update a product — only the fields that were sent get changed
+# Update a product — only the fields that were sent get changed (login required)
 @router.put("/{product_id}", response_model=ProductResponse)
-def update_product(product_id: int, updates: ProductUpdate, db: Session = Depends(get_db)):
+def update_product(product_id: int, updates: ProductUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Try to find the product
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
@@ -78,9 +79,9 @@ def update_product(product_id: int, updates: ProductUpdate, db: Session = Depend
     return product
 
 
-# Delete a product by its ID
+# Delete a product by its ID (login required)
 @router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_product(product_id: int, db: Session = Depends(get_db)):
+def delete_product(product_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Try to find the product
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:

@@ -10,6 +10,8 @@ Supports categories, products, cart, and checkout with stock management.
 - **SQLite** — lightweight file-based database
 - **Pydantic v2** — request/response validation
 - **Uvicorn** — ASGI server
+- **python-jose** — JWT token creation and verification
+- **bcrypt** — password hashing
 
 ## Features
 
@@ -17,6 +19,7 @@ Supports categories, products, cart, and checkout with stock management.
 - Product CRUD with pagination (`skip`, `limit`) and category filter
 - Cart management (add items, increase quantity if already in cart, remove items)
 - Checkout — converts cart to an order, copies product prices, calculates total, reduces stock, and clears the cart
+- JWT authentication (register + login)
 
 ## Project Structure
 
@@ -28,8 +31,10 @@ ecommerce-api/
 │   ├── database.py         # SQLite engine, session, get_db dependency
 │   ├── models.py           # SQLAlchemy table definitions
 │   ├── schemas.py          # Pydantic request/response schemas
+│   ├── auth.py             # Password hashing, JWT tokens, get_current_user
 │   └── routers/
 │       ├── __init__.py
+│       ├── auth.py         # /auth endpoints (register, login)
 │       ├── categories.py   # /categories endpoints
 │       ├── products.py     # /products endpoints
 │       ├── cart.py          # /cart endpoints
@@ -59,6 +64,13 @@ Open **http://127.0.0.1:8000/docs** to see the interactive API docs.
 
 ## API Endpoints
 
+### Auth
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/auth/register` | Register a new user |
+| POST | `/auth/login` | Log in and get a JWT token |
+
 ### General
 
 | Method | Path | Description |
@@ -69,20 +81,20 @@ Open **http://127.0.0.1:8000/docs** to see the interactive API docs.
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/categories/` | Create a category |
+| POST | `/categories/` | Create a category 🔒 |
 | GET | `/categories/` | List all categories |
 | GET | `/categories/{category_id}` | Get one category |
-| DELETE | `/categories/{category_id}` | Delete a category |
+| DELETE | `/categories/{category_id}` | Delete a category 🔒 |
 
 ### Products
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/products/` | Create a product |
+| POST | `/products/` | Create a product 🔒 |
 | GET | `/products/` | List products (supports `skip`, `limit`, `category_id`) |
 | GET | `/products/{product_id}` | Get one product |
-| PUT | `/products/{product_id}` | Update a product (partial) |
-| DELETE | `/products/{product_id}` | Delete a product |
+| PUT | `/products/{product_id}` | Update a product (partial) 🔒 |
+| DELETE | `/products/{product_id}` | Delete a product 🔒 |
 
 ### Cart
 
@@ -99,6 +111,18 @@ Open **http://127.0.0.1:8000/docs** to see the interactive API docs.
 | POST | `/orders/` | Checkout — create order from cart |
 | GET | `/orders/` | List all orders |
 | GET | `/orders/{order_id}` | Get one order with its items |
+
+## Authentication
+
+**Protected endpoints (🔒):** POST, DELETE `/categories` and POST, PUT, DELETE `/products` require a valid JWT token.  
+**Open endpoints:** All GET endpoints, `/cart`, and `/orders` are open — no login needed.
+
+### How to use auth in /docs
+
+1. Call `POST /auth/register` with an email and password to create an account.
+2. Click the **Authorize** button (🔓) at the top of the Swagger UI.
+3. Enter your email as the **username** and your password, then click **Authorize**.
+4. Now you can call the protected endpoints — the token is sent automatically.
 
 ## What I Learned
 
